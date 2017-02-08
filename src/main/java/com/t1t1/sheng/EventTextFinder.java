@@ -20,6 +20,15 @@ import java.util.regex.Pattern;
  * 문제 해결 방법: 
  * 
  * 성능 최적화를 하지 못한 채 전체를 탐색하는 방법으로 구현하였습니다.
+ * EventText일 수 있는 문구와 해당 문구의 count 데이터를 맵으로 저장한 후
+ * Map < count, Set < eventText> > 형태로 최종 가공하여
+ * 내림차순(count가 크고, eventText가 긴)으로 문구가 EventText 조건에 부합하는지 확인했습니다.
+ * 
+ * 최초에는 전체 탐색이 아닌 EventText char 길이가 작은 것부터
+ * 탐색과 함께 빈도율을 계산하여 빈도율이 높은 상품명만 다시 탐색해 나가고,
+ * 빈도율이 하락하는 지점을 포착하여 이전 문구를 EventText로 판단하는 방식으로 구현하고 싶었으나,
+ * 코드 구현간 Call by reference 하는 로직에서 데이터가 꼬이는 등의 문제가 발생하고
+ * EventText char 길이가 큰 것에서 작을 것으로 되돌아가 탐색하는 부분에서 막혀 구현하지 못했습니다.
  *
  */
 public class EventTextFinder {
@@ -31,6 +40,7 @@ public class EventTextFinder {
 	 */
 	public String execute() {
 		
+		// 상품명 줄 단위 List 형태로 가져오기
 		data = parseTxtToList("src/main/resources/text/data.txt");
 		
 		// 모든 상품명에 대하여 Event Text 일 수 있는 모든 문구들을 카운트하여 맵에 저장
@@ -80,10 +90,10 @@ public class EventTextFinder {
 	}
 
 	/**
-	 * @param data txt 파일
+	 * @param data 상품명
 	 * @return Map < EventText, count >
 	 * 
-	 * txt 파일을 읽어 Map에 저장하여 반환
+	 * 상품명에서 EventText일 수 있는 문구를 count하여 Map에 저장하여 반환
 	 * 
 	 */
 	private Map<String, Integer> getStringMap(List<String> data) {

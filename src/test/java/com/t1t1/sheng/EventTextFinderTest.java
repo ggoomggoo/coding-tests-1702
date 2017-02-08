@@ -16,7 +16,7 @@ public class EventTextFinderTest {
 	}
 
 	@Test
-	public void testMain() throws Exception {
+	public void testExecute() throws Exception {
 		assertThat(eventTextFinder.execute(), is("[파격세일!!], 50%"));
 	}
 	
